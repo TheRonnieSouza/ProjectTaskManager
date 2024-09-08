@@ -1,0 +1,5 @@
+@ProjectTaskManager.API_HostAddress = http://localhost:5202
+
+Accept: application/json
+
+###
