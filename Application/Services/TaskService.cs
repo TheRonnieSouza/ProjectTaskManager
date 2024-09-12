@@ -82,7 +82,7 @@ namespace Application.Services
             return ResultViewModel<GetTaskViewModel>.Success(model);
         }
 
-        public ResultViewModel<Guid> PostCreateTask(CreateTaskInputModel inputModel)
+        public ResultViewModel<Guid> CreateTask(CreateTaskInputModel inputModel)
         {
             //TODO
             //Validar os dados fornecidos, como título, descrição, e data de vencimento(PLUS 1).

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
   </ItemGroup>
@@ -14,6 +15,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\TaskCommand\CreateTaskCommand\" />
+    <Folder Include="Commands\TaskCommand\UpdateTaskCommand\" />
+    <Folder Include="Queries\TaskQueries\GetAllTasks\" />
+    <Folder Include="Queries\TaskQueries\GetTaskById\" />
   </ItemGroup>
 
 </Project>

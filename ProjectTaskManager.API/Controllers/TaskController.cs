@@ -57,7 +57,7 @@ namespace ProjectTaskManager.API.Controllers
         [HttpPost]
         public IActionResult PostCreateTask(CreateTaskInputModel model)
         {
-            var result = _taskService.PostCreateTask(model);
+            var result = _taskService.CreateTask(model);
 
             return CreatedAtAction(nameof(GetTaskById), new { id = result.Data}, model);
         }

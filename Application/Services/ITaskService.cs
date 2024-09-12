@@ -1,11 +1,6 @@
 ﻿using Application.Models;
 using Application.Models.Tasks.InputModel;
 using Application.Models.Tasks.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -17,7 +12,7 @@ namespace Application.Services
 
         ResultViewModel<GetTaskViewModel> GetTaskById(Guid id);
 
-        ResultViewModel<Guid> PostCreateTask(CreateTaskInputModel inputModel);
+        ResultViewModel<Guid> CreateTask(CreateTaskInputModel inputModel);
 
         ResultViewModel UpdateTask(Guid id, UpdateTaskInputModel inputModel);
 
