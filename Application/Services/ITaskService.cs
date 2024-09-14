@@ -14,7 +14,7 @@ namespace Application.Services
 
         ResultViewModel<Guid> CreateTask(CreateTaskInputModel inputModel);
 
-        ResultViewModel UpdateTask(Guid id, UpdateTaskInputModel inputModel);
+        ResultViewModel UpdateTask(UpdateTaskInputModel inputModel);
 
         ResultViewModel AssingTasksToUsers(Guid id,Guid idUser);
     }

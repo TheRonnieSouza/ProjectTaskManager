@@ -15,7 +15,7 @@ namespace Application.Commands.TaskCommand.DeleteTaskCommand
         }
         public async Task<ResultViewModel> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.Id)
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.Id);
 
             if (task == null)
                 return ResultViewModel.Error("A task pode ser encontrada ou nao pode ser deletada");

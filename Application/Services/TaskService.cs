@@ -1,15 +1,8 @@
 ﻿using Application.Models;
 using Application.Models.Tasks.InputModel;
 using Application.Models.Tasks.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.Enums;
-using Core.Entites;
+using Infrastructure.Persistence;
 
 namespace Application.Services
 {
@@ -90,20 +83,20 @@ namespace Application.Services
 
             var task = inputModel.ToEntity();
 
-            _context.Tasks.Add(task);
-            _context.SaveChanges();
+             _context.Tasks.Add(task);
+             _context.SaveChanges();
 
             return ResultViewModel<Guid>.Success(task.Id);
         }
 
-        public ResultViewModel UpdateTask(Guid id, UpdateTaskInputModel inputModel)
+        public ResultViewModel UpdateTask(UpdateTaskInputModel inputModel)
         {
             //TODO
             // Permitir a atualização dos dados de uma tarefa específica, incluindo título, descrição, status e data de vencimento.
             // Validar que as alterações estejam de acordo com as regras de negócio, como uma data de vencimento futura.
             //task.Update(inputModel);
 
-            var task = _context.Tasks.SingleOrDefault(t => t.Id == id);
+            var task = _context.Tasks.SingleOrDefault(t => t.Id == inputModel.Id);
 
             if (task == null)
             {

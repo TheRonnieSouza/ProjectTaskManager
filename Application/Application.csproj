@@ -17,11 +17,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\TaskCommand\CreateTaskCommand\" />
-    <Folder Include="Commands\TaskCommand\UpdateTaskCommand\" />
-    <Folder Include="Queries\TaskQueries\GetAllTasks\" />
-    <Folder Include="Queries\TaskQueries\GetTaskById\" />
-  </ItemGroup>
-
 </Project>

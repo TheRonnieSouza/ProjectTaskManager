@@ -66,9 +66,9 @@ namespace ProjectTaskManager.API.Controllers
 
         //Put api/task/1234
         [HttpPut("update-task/{id}")]
-        public IActionResult UpdateTask(Guid id, UpdateTaskInputModel inputModel)
+        public IActionResult UpdateTask(UpdateTaskInputModel inputModel)
         {
-            var result = _taskService.UpdateTask(id, inputModel);
+            var result = _taskService.UpdateTask(inputModel);
 
             if (result == null)
             {

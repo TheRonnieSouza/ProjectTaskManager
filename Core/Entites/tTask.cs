@@ -47,6 +47,5 @@ namespace Core.Entites
         {
             UserId = userId;
         }
-
     }
 }
