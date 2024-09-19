@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Queries.TaskQueries.GetAllTasks
 {
-    public class GetAllTasksCommand : IRequest<ResultViewModel<List<GetTaskViewModel>>>
+    public class GetAllTasksQuery : IRequest<ResultViewModel<List<GetTaskViewModel>>>
     {
 
     }

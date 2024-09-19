@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Application.Queries.TaskQueries.GetTaskById
 {
-    public class GetTaskByIdCommand : IRequest<ResultViewModel<GetTaskViewModel>>
+    public class GetTaskByIdQuery : IRequest<ResultViewModel<GetTaskViewModel>>
     {
-        public GetTaskByIdCommand(Guid id) 
+        public GetTaskByIdQuery(Guid id) 
         {
             Id = id;        
         }

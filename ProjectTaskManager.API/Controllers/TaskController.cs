@@ -1,28 +1,29 @@
 using Application.Models.Tasks.InputModel;
-using Application.Models.Tasks.ViewModels;
-using Application.Services;
-using Core.Enums;
-using Infrastructure.Persistence;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using Application.Commands.TaskCommand.DeleteTaskCommand;
+using Application.Queries.TaskQueries.GetTaskById;
+using Application.Commands.TaskCommand.CreateTaskCommand;
+using Application.Commands.TaskCommand.UpdateTaskCommand;
+using Application.Commands.TaskCommand.AssingTasksToUsersCommand;
 namespace ProjectTaskManager.API.Controllers
 {
     [ApiController]
     [Route("api/task")]
     public class TaskController : ControllerBase
     {
-        private readonly ITaskService _taskService;
+        private readonly IMediator _mediator;
 
-         public TaskController(ITaskService taskService)
+         public TaskController(IMediator mediator)
          {
-            _taskService = taskService;
+            _mediator = mediator;
          }
 
         //Delete api/task/1234
         [HttpDelete("{id}")]
-        public IActionResult DeleteTask(Guid id)
+        public async Task<IActionResult> DeleteTask(Guid id)
         {
-            var result = _taskService.DeleteTask(id);
+            var result = await _mediator.Send(new DeleteTaskCommand(id));
 
             if(!result.IsSuccess)
                 return BadRequest(result.Message);
@@ -32,9 +33,9 @@ namespace ProjectTaskManager.API.Controllers
 
         //GET api/task/
         [HttpGet]
-        public IActionResult GetAllTasks()
+        public async Task<IActionResult> GetAllTasks()
         {
-            var result = _taskService.GetAllTasks();
+            var result = await _mediator.Send(GetAllTasks());
 
              return Ok(result);
         }
@@ -42,9 +43,9 @@ namespace ProjectTaskManager.API.Controllers
         
         //Get api/task/user
         [HttpGet("{id}")]
-        public IActionResult GetTaskById(Guid id)
+        public async Task<IActionResult> GetTaskById(Guid id)
         {
-            var result = _taskService.GetTaskById(id);
+            var result = await _mediator.Send(new GetTaskByIdQuery(id));
 
             if(!result.IsSuccess)
             {
@@ -55,33 +56,38 @@ namespace ProjectTaskManager.API.Controllers
 
         //Post api/task/
         [HttpPost]
-        public IActionResult PostCreateTask(CreateTaskInputModel model)
+        public async Task<IActionResult> PostCreateTask(CreateTaskCommand command)
         {
-            var result = _taskService.CreateTask(model);
+            var result = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetTaskById), new { id = result.Data}, model);
+            return CreatedAtAction(nameof(GetTaskById), new { id = result.Data}, command);
         }
 
         
 
         //Put api/task/1234
         [HttpPut("update-task/{id}")]
-        public IActionResult UpdateTask(UpdateTaskInputModel inputModel)
+        public async Task<IActionResult> UpdateTask(UpdateTaskCommand command)
         {
-            var result = _taskService.UpdateTask(inputModel);
+            var result = await _mediator.Send(command);
 
-            if (result == null)
+            if (!result.IsSuccess)
             {
-                return BadRequest();
+                return BadRequest(result.Message);
             }
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public IActionResult AssingTasksToUsers(Guid id, Guid idUser)
+        public async Task<IActionResult> AssingTasksToUsers(Guid id, Guid idUser)
         {
-            var task = _taskService.AssingTasksToUsers(id, idUser);
-            return Ok();            
+            var result = await _mediator.Send(new AssingTasksToUsersCommand(id, idUser));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Message);
+            }
+            return NoContent();
         }       
         
     }

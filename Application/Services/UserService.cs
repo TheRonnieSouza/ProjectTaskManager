@@ -1,14 +1,7 @@
 ﻿using Application.Models;
-using Application.Models.Tasks.ViewModels;
 using Application.Models.Users.InputModels;
 using Application.Models.Users.ViewModels;
-using Core.Entites;
 using Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -34,7 +27,7 @@ namespace Application.Services
             return ResultViewModel.Success();
         }
 
-        public ResultViewModel<List<UsersViewModels>> Get(string search)
+        public ResultViewModel<List<UsersViewModels>> GetSearch(string search)
         {
             //TODO 
             //mecanismo de busca
@@ -77,7 +70,7 @@ namespace Application.Services
             return ResultViewModel<UsersViewModels>.Success(userViewModel);
         }
 
-        public ResultViewModel<Guid> PostCreateUser(CreateUserInputModel inputModel)
+        public ResultViewModel<Guid> CreateUser(CreateUserInputModel inputModel)
         {
             //TODO 
             //Permitir o cadastro de novos usuários no sistema, validando informações como nome e email (PLUS 1).

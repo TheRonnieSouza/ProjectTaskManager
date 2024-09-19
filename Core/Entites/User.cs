@@ -24,10 +24,10 @@
 
         // TODO COMO DEVE SER FEITO O UPDATE DA MANEIRA CORRETA SEM FAZER A REFERENCIA A CAMADA APPLICATION
 
-        //public void UpdateUser(UpdateUserInputModel model)
-        //{
-        //    Name = model.Name;
-        //    Email = model.Email;
-        //}
+        public void UpdateUser(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
     }
 }

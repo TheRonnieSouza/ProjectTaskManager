@@ -1,5 +1,8 @@
-﻿using Application.Models.Projects.InputModels;
+﻿using Application.Commands.ProjectCommand.CreateProjectCommand;
+using Application.Models.Projects.InputModels;
+using Application.Queries.UserQueries.GetUserById;
 using Application.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,24 +10,30 @@ namespace ProjectTaskManager.API.Controllers
 {
     public class ProjectController : Controller
     {
-        private readonly IProjectService _projectService;
-        public ProjectController(IProjectService service)
+        private readonly IMediator _mediator;
+        public ProjectController(IMediator mediator)
         {
-            _projectService = service;
+           _mediator = mediator;
         }
 
         [HttpPut]
-        public IActionResult CreateProject(CreateProjectInputModel inputModel)
+        public async Task<IActionResult> CreateProject( CreateProjectCommand command)
         {
-            var result = _projectService.CreateProject(inputModel);
 
-            return CreatedAtAction(nameof(GetProjectById), new { id = result.Data }, inputModel);
+            var result = await _mediator.Send(command);  //_projectService.CreateProject(inputModel);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return CreatedAtAction(nameof(GetProjectById), new { id = result.Data }, command);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetProjectById(Guid id)
+        public async Task<IActionResult> GetProjectById(Guid id)
         {
-            var result = _projectService.GetProjectById(id);
+            var result = await _mediator.Send(new GetUserByIdQuery(id));
 
             if (!result.IsSuccess)
             {

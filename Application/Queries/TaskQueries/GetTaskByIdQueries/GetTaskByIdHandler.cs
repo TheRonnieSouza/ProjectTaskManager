@@ -6,7 +6,7 @@ using Core.Enums;
 
 namespace Application.Queries.TaskQueries.GetTaskById
 {
-    public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdCommand, ResultViewModel<GetTaskViewModel>>
+    public class GetTaskByIdHandler : IRequestHandler<GetTaskByIdQuery, ResultViewModel<GetTaskViewModel>>
     {
         private readonly ProjectTaskManagerDbContext _context;
         public GetTaskByIdHandler(ProjectTaskManagerDbContext context)
@@ -14,7 +14,7 @@ namespace Application.Queries.TaskQueries.GetTaskById
             _context = context;
         }
 
-        public async Task<ResultViewModel<GetTaskViewModel>> Handle(GetTaskByIdCommand request, CancellationToken cancellationToken)
+        public async Task<ResultViewModel<GetTaskViewModel>> Handle(GetTaskByIdQuery request, CancellationToken cancellationToken)
         {
             //TODO 
             //Buscar e exibir detalhes de uma tarefa específica, solicitando o identificador (Id) da tarefa.

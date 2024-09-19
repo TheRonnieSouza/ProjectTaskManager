@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries.TaskQueries.GetAllTasks
 {
-    public class GetAllTasksHandler : IRequestHandler<GetAllTasksCommand, ResultViewModel<List<GetTaskViewModel>>>
+    public class GetAllTasksHandler : IRequestHandler<GetAllTasksQuery, ResultViewModel<List<GetTaskViewModel>>>
     {
         private readonly ProjectTaskManagerDbContext _context;
         public GetAllTasksHandler(ProjectTaskManagerDbContext context)
@@ -15,7 +15,7 @@ namespace Application.Queries.TaskQueries.GetAllTasks
             _context = context;
         }
 
-        public async Task<ResultViewModel<List<GetTaskViewModel>>> Handle(GetAllTasksCommand request, CancellationToken cancellationToken)
+        public async Task<ResultViewModel<List<GetTaskViewModel>>> Handle(GetAllTasksQuery request, CancellationToken cancellationToken)
         {
             //TODO
             //Permitir a consulta de todas as tarefas registradas no sistema.
