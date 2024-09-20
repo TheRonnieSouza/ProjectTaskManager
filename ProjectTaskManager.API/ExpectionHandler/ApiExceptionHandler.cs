@@ -10,7 +10,8 @@ namespace ProjectTaskManager.API.ExpectionHandler
             var details = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
-                Title = "Server Error"
+                Title = "Server Error",
+                Detail = exception.InnerException.Message
             };
 
             //Fazer o que quiser como logar em um arquivo

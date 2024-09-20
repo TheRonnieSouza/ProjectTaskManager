@@ -18,7 +18,7 @@ namespace Application.Commands.UserCommands.DeleteUserCommand
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id);
 
             if (user == null)
-                return ResultViewModel.Error("O usuario nao pode ser deletado ou nao fo encontrado");
+                return ResultViewModel.Error("The user cannot be deleted or the user not founded");
 
             user.SetAsDeleted();
             _context.Update(user);

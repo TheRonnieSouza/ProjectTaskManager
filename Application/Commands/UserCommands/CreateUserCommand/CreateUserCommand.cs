@@ -6,7 +6,7 @@ namespace Application.Commands.UserCommands.CreateUserCommand
 {
     public class CreateUserCommand : IRequest<ResultViewModel<Guid>>
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

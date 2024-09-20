@@ -1,4 +1,6 @@
-﻿using Application.Services;
+﻿using Application.Commands.TaskCommand.CreateTaskCommand;
+using Application.Services;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -8,6 +10,7 @@ namespace Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddServices();
+            services.AddMediador();
 
             return services;
         
@@ -18,8 +21,16 @@ namespace Application
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IUserService, UserServices>();
-
             return services;
-        }    
+        }
+
+        private static IServiceCollection AddMediador(this IServiceCollection services)
+        {
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblyContaining<CreateTaskCommand>();
+            });
+            return services;
+        }
     }
 }

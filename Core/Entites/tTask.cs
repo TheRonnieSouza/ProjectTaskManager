@@ -26,15 +26,15 @@ namespace Core.Entites
         public string Description { get; set; }
         public DateTime DeliveryDate { get; set; }
         public EnumTaskStatus Status { get; set; }
-        public Guid UserId { get; set; } // FK (Chave Estrangeira para Usuário)
+        public Guid? UserId { get; set; } 
         public EnumTaskPriority Priority { get; set; }
         public Project Project { get; set; }
-        public Guid ProjectId { get; set; }  //FK (Chave Estrangeira opcional para Projeto)
-        public List<Comment>? Comments { get; set; } // Relação 1 (Uma Tarefa pode ter vários Comentários)
-        public List<Tag>? Tags { get; set; } //Relação N        (Uma Tarefa pode ter várias Tags e uma Tag pode estar em várias Tarefas)
+        public Guid ProjectId { get; set; }  
+        public List<Comment>? Comments { get; set; } 
+        public List<Tag>? Tags { get; set; } 
 
 
-        //TODO - Duvida se aqui devo ter uma referencia de using da camada application, como devo fazer o update corretamente? 
+        //TODO 
 
         //public void Update(UpdateTaskInputModel updateTaskModel)// string title, string description, EnumTaskPriority priority, DateTime deliveryDate)
         //{
