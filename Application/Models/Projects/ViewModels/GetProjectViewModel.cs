@@ -7,7 +7,7 @@ namespace Application.Models.Projects.ViewModels
         public GetProjectViewModel() { }    
         public GetProjectViewModel(string name, string description,
                                     Guid managerId, DateTime createdDate,
-                                    DateTime completedDate, List<tTask> tasks,
+                                    DateTime? completedDate, List<tTask> tasks,
                                     List<User> participants)
         {
             Name = name;
@@ -23,7 +23,7 @@ namespace Application.Models.Projects.ViewModels
         public string Description { get; private set; }
         public Guid ManagerId { get; private set; }
         public DateTime CreatedDate { get; private set; }
-        public DateTime CompletedDate { get; private set; }
+        public DateTime? CompletedDate { get; private set; }
         public List<tTask> Tasks { get; private set; }
         public List<User> Participants { get; private set; }
 

@@ -1,14 +1,13 @@
 ﻿using Application.Commands.ProjectCommand.CreateProjectCommand;
-using Application.Models.Projects.InputModels;
 using Application.Queries.UserQueries.GetUserById;
-using Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace ProjectTaskManager.API.Controllers
 {
-    public class ProjectController : Controller
+    [ApiController]
+    [Route("api/projects")]
+    public class ProjectController : ControllerBase
     {
         private readonly IMediator _mediator;
         public ProjectController(IMediator mediator)
@@ -16,11 +15,10 @@ namespace ProjectTaskManager.API.Controllers
            _mediator = mediator;
         }
 
-        [HttpPut]
+        [HttpPost("create-project")]
         public async Task<IActionResult> CreateProject( CreateProjectCommand command)
         {
-
-            var result = await _mediator.Send(command);  //_projectService.CreateProject(inputModel);
+            var result = await _mediator.Send(command);  
 
             if (!result.IsSuccess)
             {

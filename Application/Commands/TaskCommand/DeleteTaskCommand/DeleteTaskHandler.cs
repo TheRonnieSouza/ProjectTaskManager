@@ -20,6 +20,7 @@ namespace Application.Commands.TaskCommand.DeleteTaskCommand
             if (task == null)
                 return ResultViewModel.Error("A task pode ser encontrada ou nao pode ser deletada");
              
+            task.SetAsDeleted();
              _context.Update(task);
             await _context.SaveChangesAsync();
             return ResultViewModel.Success();

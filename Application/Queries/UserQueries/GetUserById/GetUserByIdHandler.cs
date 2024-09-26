@@ -17,7 +17,7 @@ namespace Application.Queries.UserQueries.GetUserById
 
         public async Task<ResultViewModel<UsersViewModels>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id && u.IsActive == true);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id && u.IsDeleted != true);
 
             if (user == null)
                 return ResultViewModel<UsersViewModels>.Error("Usuario nao encotrado");

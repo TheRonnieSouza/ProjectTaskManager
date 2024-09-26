@@ -19,7 +19,8 @@ builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var stringConnection = builder.Configuration.GetConnectionString("ProjectTaskManager");
-builder.Services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseSqlServer(stringConnection));
+//new ProjectTaskManagerDesingFactory(stringConnection);
+builder.Services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseSqlServer(stringConnection));//o => o.UseSqlServer(stringConnection)
 //builder.Services.AddDbContext<ProjectTaskManagerDbContext>(u => u.UseInMemoryDatabase("TodoListDb"));
 
 var app = builder.Build();

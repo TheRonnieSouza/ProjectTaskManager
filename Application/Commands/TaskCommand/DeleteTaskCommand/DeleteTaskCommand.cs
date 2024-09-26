@@ -7,7 +7,7 @@ namespace Application.Commands.TaskCommand.DeleteTaskCommand
     {
         public DeleteTaskCommand(Guid id)
         {
-            id = id;
+            Id = id;
         }
 
         public Guid Id { get; private set; }

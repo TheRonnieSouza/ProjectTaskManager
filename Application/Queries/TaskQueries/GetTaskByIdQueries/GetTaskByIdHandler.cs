@@ -19,7 +19,7 @@ namespace Application.Queries.TaskQueries.GetTaskById
             //TODO 
             //Buscar e exibir detalhes de uma tarefa específica, solicitando o identificador (Id) da tarefa.
 
-            var task = _context.Tasks.Where(t => t.Status != EnumTaskStatus.Completed)
+            var task = _context.Tasks.Where(t => t.Status != EnumTaskStatus.Completed && t.IsDeleted != true)
                                      .FirstOrDefault(ta => ta.Id == request.Id);
 
             if (task == null)

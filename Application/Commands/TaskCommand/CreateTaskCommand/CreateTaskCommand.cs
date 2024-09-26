@@ -8,21 +8,10 @@ namespace Application.Commands.TaskCommand.CreateTaskCommand
 {
     public class CreateTaskCommand : IRequest<ResultViewModel<Guid>>
     {
-        public CreateTaskCommand(CreateTaskInputModel inputModel) 
-        {
-            Id = inputModel.Id;
-            UserId = inputModel.UserId;
-            ProjectId = inputModel.ProjectId;
-            Title = inputModel.Title;
-            Description = inputModel.Description;
-            Priority = inputModel.Priority;
-            DeliveryDate = inputModel.DeliveryDate;
-            IsCompleted = inputModel.IsCompleted;
-        }
-
+        
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
-        public Guid ProjectId { get; set; }
+        public Guid UserId { get; set; } = Guid.Empty;
+        public Guid ProjectId { get; set; } = Guid.Empty;
         public string Title { get; set; }
         public string Description { get; set; }
         public EnumTaskPriority Priority { get; set; }

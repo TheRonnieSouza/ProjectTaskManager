@@ -1,5 +1,7 @@
 ﻿using Core.Entites;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using System.Collections.Specialized;
 
 namespace Infrastructure.Persistence
 {
@@ -90,5 +92,18 @@ namespace Infrastructure.Persistence
         }
 
 
+    }
+
+    public class ProjectTaskManagerDbContextFactory : IDesignTimeDbContextFactory<ProjectTaskManagerDbContext>
+    {
+        
+        public ProjectTaskManagerDbContext CreateDbContext(string[] args)
+        {
+            string stringConnection = "Integrated Security=true;Password=Sq0p@ulinia;Persist Security Info=True;User ID=sa;Initial Catalog=ProjectTaskManager;Data Source=localhost;Trusted_Connection=false;Encrypt=false;TrustServerCertificate=true";
+            var optionsBuilder = new DbContextOptionsBuilder<ProjectTaskManagerDbContext>();
+            optionsBuilder.UseSqlServer(stringConnection);
+
+            return new ProjectTaskManagerDbContext(optionsBuilder.Options);
+        }
     }
 }

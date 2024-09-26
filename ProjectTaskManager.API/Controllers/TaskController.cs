@@ -1,11 +1,11 @@
-using Application.Models.Tasks.InputModel;
+using Application.Commands.TaskCommand.AssingTasksToUsersCommand;
+using Application.Commands.TaskCommand.CreateTaskCommand;
+using Application.Commands.TaskCommand.DeleteTaskCommand;
+using Application.Commands.TaskCommand.UpdateTaskCommand;
+using Application.Queries.TaskQueries.GetAllTasks;
+using Application.Queries.TaskQueries.GetTaskById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Application.Commands.TaskCommand.DeleteTaskCommand;
-using Application.Queries.TaskQueries.GetTaskById;
-using Application.Commands.TaskCommand.CreateTaskCommand;
-using Application.Commands.TaskCommand.UpdateTaskCommand;
-using Application.Commands.TaskCommand.AssingTasksToUsersCommand;
 namespace ProjectTaskManager.API.Controllers
 {
     [ApiController]
@@ -35,7 +35,7 @@ namespace ProjectTaskManager.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllTasks()
         {
-            var result = await _mediator.Send(GetAllTasks());
+            var result = await _mediator.Send(new GetAllTasksQuery());
 
              return Ok(result);
         }
