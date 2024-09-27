@@ -18,7 +18,7 @@ namespace Application.Commands.TaskCommand.CreateTaskCommand
         public DateTime DeliveryDate { get; set; }
         public bool IsCompleted { get; set; }
         public tTask ToEntity() =>
-            new(Id, Title, Description, DeliveryDate, UserId, Priority, ProjectId);
+            new(Id, UserId, ProjectId,Title, Description, DeliveryDate, Priority);
 
     }
 }

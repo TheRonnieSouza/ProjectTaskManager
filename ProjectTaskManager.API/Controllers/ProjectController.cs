@@ -15,7 +15,7 @@ namespace ProjectTaskManager.API.Controllers
            _mediator = mediator;
         }
 
-        [HttpPost("create-project")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateProject( CreateProjectCommand command)
         {
             var result = await _mediator.Send(command);  
@@ -28,7 +28,7 @@ namespace ProjectTaskManager.API.Controllers
             return CreatedAtAction(nameof(GetProjectById), new { id = result.Data }, command);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("Get-One/{id}")]
         public async Task<IActionResult> GetProjectById(Guid id)
         {
             var result = await _mediator.Send(new GetUserByIdQuery(id));

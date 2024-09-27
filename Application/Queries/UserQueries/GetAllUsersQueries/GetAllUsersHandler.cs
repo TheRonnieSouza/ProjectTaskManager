@@ -15,7 +15,7 @@ namespace Application.Queries.UserQueries.GetAllUsersQueries
 
         public async Task<ResultViewModel<List<UsersViewModels>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = _context.Users.Where(u => u.IsActive).ToList();
+            var users = _context.Users.Where(u => !u.IsDeleted).ToList();
 
             if (users == null)
                 return ResultViewModel<List<UsersViewModels>>.Error("O usuario nao foi encontrado");

@@ -5,16 +5,18 @@ namespace Application.Models.Users.ViewModels
     public class UsersViewModels
     {
         public UsersViewModels() { }
-        public UsersViewModels(string name, string email, bool isActive)
+        public UsersViewModels(Guid id,string name, string email, bool isActive)
         {
-            Name = name; Email = email; IsActive = isActive;
+            Id = id;  Name = name; Email = email; IsActive = isActive;
         }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public bool IsActive { get; set; }
 
         public static UsersViewModels FromEntity(User users) =>
-                      new(users.Name
+                      new(users.Id
+                          ,users.Name
                           , users.Email
                           , users.IsActive);
     }

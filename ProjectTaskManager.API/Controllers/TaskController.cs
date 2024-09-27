@@ -20,7 +20,7 @@ namespace ProjectTaskManager.API.Controllers
          }
 
         //Delete api/task/1234
-        [HttpDelete("{id}")]
+        [HttpDelete("One/{id}")]
         public async Task<IActionResult> DeleteTask(Guid id)
         {
             var result = await _mediator.Send(new DeleteTaskCommand(id));
@@ -32,7 +32,7 @@ namespace ProjectTaskManager.API.Controllers
         }
 
         //GET api/task/
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<IActionResult> GetAllTasks()
         {
             var result = await _mediator.Send(new GetAllTasksQuery());
@@ -42,7 +42,7 @@ namespace ProjectTaskManager.API.Controllers
 
         
         //Get api/task/user
-        [HttpGet("{id}")]
+        [HttpGet("Get-One/{id}")]
         public async Task<IActionResult> GetTaskById(Guid id)
         {
             var result = await _mediator.Send(new GetTaskByIdQuery(id));
@@ -66,7 +66,7 @@ namespace ProjectTaskManager.API.Controllers
         
 
         //Put api/task/1234
-        [HttpPut("update-task/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(UpdateTaskCommand command)
         {
             var result = await _mediator.Send(command);
@@ -78,10 +78,10 @@ namespace ProjectTaskManager.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> AssingTasksToUsers(Guid id, Guid idUser)
+        [HttpPut("Assign-Task-For-User")]
+        public async Task<IActionResult> AssignTasksToUsers(AssingTasksToUsersCommand command)
         {
-            var result = await _mediator.Send(new AssingTasksToUsersCommand(id, idUser));
+            var result = await _mediator.Send(command);
 
             if (!result.IsSuccess)
             {

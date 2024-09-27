@@ -5,11 +5,12 @@ namespace Application.Models.Projects.ViewModels
     public class GetProjectViewModel
     {
         public GetProjectViewModel() { }    
-        public GetProjectViewModel(string name, string description,
+        public GetProjectViewModel(Guid id, string name, string description,
                                     Guid managerId, DateTime createdDate,
                                     DateTime? completedDate, List<tTask> tasks,
                                     List<User> participants)
         {
+            id = id;
             Name = name;
             Description = description;
             ManagerId = managerId;
@@ -28,7 +29,7 @@ namespace Application.Models.Projects.ViewModels
         public List<User> Participants { get; private set; }
 
         public static GetProjectViewModel FromEntity(Project entity)
-                => new(entity.Name, entity.Description, entity.ManagerId,
+                => new(entity.Id, entity.Name, entity.Description, entity.ManagerId,
                     entity.CreatedDate, entity.CompletedDate, entity.Tasks, entity.Participants);
     }
 }

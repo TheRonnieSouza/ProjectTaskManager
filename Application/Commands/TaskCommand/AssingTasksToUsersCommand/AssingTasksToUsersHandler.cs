@@ -16,12 +16,13 @@ namespace Application.Commands.TaskCommand.AssingTasksToUsersCommand
 
         public async Task<ResultViewModel> Handle(AssingTasksToUsersCommand request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.Id);
+            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.TaskId);
 
             if (task == null)
-                return ResultViewModel.Error("Projeto nao existe.");
+                return ResultViewModel.Error("Task nao existe.");
 
-            task.AssingTasksToUser(request.Id);
+            task.AssingTasksToUser(request.UserId);
+            await  _context.SaveChangesAsync();
 
             return ResultViewModel.Success();
         }
