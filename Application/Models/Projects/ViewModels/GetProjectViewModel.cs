@@ -1,4 +1,5 @@
 ﻿using Core.Entites;
+using System.Text.Json.Serialization;
 
 namespace Application.Models.Projects.ViewModels
 {
@@ -8,7 +9,7 @@ namespace Application.Models.Projects.ViewModels
         public GetProjectViewModel(Guid id, string name, string description,
                                     Guid managerId, DateTime createdDate,
                                     DateTime? completedDate, List<tTask> tasks,
-                                    List<User> participants)
+                                    List<User> participants,User manager)
         {
             id = id;
             Name = name;
@@ -18,6 +19,7 @@ namespace Application.Models.Projects.ViewModels
             CompletedDate = completedDate;
             Tasks = tasks;
             Participants = participants;
+            Manager = manager;
         }
 
         public string Name { get; private set; }
@@ -25,11 +27,14 @@ namespace Application.Models.Projects.ViewModels
         public Guid ManagerId { get; private set; }
         public DateTime CreatedDate { get; private set; }
         public DateTime? CompletedDate { get; private set; }
+
         public List<tTask> Tasks { get; private set; }
+        [JsonIgnore]
         public List<User> Participants { get; private set; }
+        public User Manager { get; private set; }
 
         public static GetProjectViewModel FromEntity(Project entity)
                 => new(entity.Id, entity.Name, entity.Description, entity.ManagerId,
-                    entity.CreatedDate, entity.CompletedDate, entity.Tasks, entity.Participants);
+                    entity.CreatedDate, entity.CompletedDate, entity.Tasks, entity.Participants, entity.Manager);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using System.Text.Json.Serialization;
 
 namespace Core.Entites
 {
@@ -20,8 +21,10 @@ namespace Core.Entites
         public Guid? TeamId { get; set; }
         public Profile Profile { get; set; }
         public bool IsActive { get; set; }
-        public List<tTask>? AssignedTasks { get; set; }             
-        public List<Project>? ManagementProjects { get; set; }      
+        public List<tTask>? AssignedTasks { get; set; }
+        [JsonIgnore]
+        public List<Project>? ManagementProjects { get; set; }
+        [JsonIgnore]
         public List<Project>? ParticipaitingProjects { get; set; }  
         
 

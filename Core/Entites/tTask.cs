@@ -1,4 +1,5 @@
 ﻿using Core.Enums;
+using System.Text.Json.Serialization;
 
 namespace Core.Entites
 {
@@ -29,6 +30,7 @@ namespace Core.Entites
         public DateTime DeliveryDate { get; set; }
         public EnumTaskStatus Status { get; set; }        
         public EnumTaskPriority Priority { get; set; }
+        [JsonIgnore]
         public Project Project { get; set; }         
         public List<Comment>? Comments { get; set; } 
         public List<Tag>? Tags { get; set; } 

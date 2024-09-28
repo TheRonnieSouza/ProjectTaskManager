@@ -16,6 +16,6 @@ namespace Application.Queries.ProjectQueries.GetProjectByIdQueries
 
         public static GetProjectViewModel FromEntity(Project entity)
                => new(entity.Id,entity.Name, entity.Description, entity.ManagerId,
-                   entity.CreatedDate, entity.CompletedDate, entity.Tasks, entity.Participants);
+                   entity.CreatedDate, entity.CompletedDate, entity.Tasks, entity.Participants, entity.Manager);
     }
 }
