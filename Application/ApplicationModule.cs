@@ -1,4 +1,6 @@
-﻿using Application.Commands.TaskCommand.CreateTaskCommand;
+﻿using Application.Commands.ProjectCommand.CreateProjectCommand;
+using Application.Commands.TaskCommand.CreateTaskCommand;
+using Application.Models;
 using Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +32,8 @@ namespace Application
             {
                 cfg.RegisterServicesFromAssemblyContaining<CreateTaskCommand>();
             });
+
+            services.AddTransient < IPipelineBehavior<CreateProjectCommand, ResultViewModel<Guid>>, ValidadeCreateProjectBehavior>();
             return services;
         }
     }
