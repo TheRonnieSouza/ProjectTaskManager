@@ -16,9 +16,6 @@ namespace Application.Commands.ProjectCommand.ProjectDeleteCommand
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == request.Id);
 
-            if (project == null)
-                 return  ResultViewModel.Error("Project not found!");
-
             project.SetAsDeleted();
             _context.Update(project);
             await _context.SaveChangesAsync();

@@ -15,18 +15,9 @@ namespace Application.Commands.TaskCommand.UpdateTaskCommand
 
         public async Task<ResultViewModel> Handle(UpdateTaskCommand request, CancellationToken cancellationToken)
         {
-            //TODO
-            // Permitir a atualização dos dados de uma tarefa específica, incluindo título, descrição, status e data de vencimento.
-            // Validar que as alterações estejam de acordo com as regras de negócio, como uma data de vencimento futura.
-            //task.Update(inputModel);
+            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
 
-            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.Id);
-
-            if (task == null)
-            {
-                return ResultViewModel.Error("Nao foi possivel atualizar a task");
-            }          
-
+            task.UpdateTask(request.Title,request.Description, request.Priority,request.DeliveryDate,request.IsCompleted,request.UserId, request.ProjectId);
             _context.Update(task);
             await _context.SaveChangesAsync();
 

@@ -7,18 +7,10 @@ namespace Application.Commands.TaskCommand.UpdateTaskCommand
 {
     public class UpdateTaskCommand : IRequest<ResultViewModel>
     {
-        public UpdateTaskCommand(UpdateTaskInputModel model, Guid id )
-        {
-            Id = model.Id;
-            UserId = model.UserId;
-            Title = model.Title;
-            Description = model.Description;
-            DeliveryDate = model.DeliveryDate;
-            Priority = model.Priority;
-            IsCompleted = model.IsCompleted;
-        }
+        
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
+        public Guid ProjectId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DeliveryDate { get; set; }

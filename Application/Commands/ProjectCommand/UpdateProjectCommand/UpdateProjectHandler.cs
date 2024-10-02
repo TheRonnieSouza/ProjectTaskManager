@@ -18,9 +18,6 @@ namespace Application.Commands.ProjectCommand.UpdateProjectCommand
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p =>  p.Id == request.Id);
 
-            if (project == null)
-                return ResultViewModel.Error("Don't was found the project to update!");
-
             project.UpdateProject(request.Description, request.CompletedDate,request.ManagerId,request.ParticipatingId);
             _context.Update(project);
             await _context.SaveChangesAsync();

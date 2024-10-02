@@ -14,10 +14,6 @@ namespace Application.Commands.TaskCommand.CreateTaskCommand
 
         public async Task<ResultViewModel<Guid>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
-            //TODO
-            //Validar os dados fornecidos, como título, descrição, e data de vencimento(PLUS 1).
-            //Garantir que cada tarefa esteja associada a um usuário específico.
-
             var task = request.ToEntity();
 
             await _context.Tasks.AddAsync(task);

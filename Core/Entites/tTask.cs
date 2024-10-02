@@ -34,17 +34,20 @@ namespace Core.Entites
         public Project Project { get; set; }         
         public List<Comment>? Comments { get; set; } 
         public List<Tag>? Tags { get; set; } 
+        public bool IsCompleted { get; set; } 
 
 
-        //TODO 
-
-        //public void Update(UpdateTaskInputModel updateTaskModel)// string title, string description, EnumTaskPriority priority, DateTime deliveryDate)
-        //{
-        //    Title = updateTaskModel.Title;
-        //    Description = updateTaskModel.Description;
-        //    Priority = updateTaskModel.Priority;
-        //    DeliveryDate = updateTaskModel.DeliveryDate;
-        //}
+        public void UpdateTask(string title, string description, EnumTaskPriority priority, DateTime deliveryDate, bool isCompleted,
+                            Guid? userId, Guid projectId)
+        {
+            Title = title;
+            Description = description;
+            Priority = priority;
+            DeliveryDate = deliveryDate;
+            IsCompleted = isCompleted;
+            UserId = userId;
+            ProjectId = projectId;
+        }
         public void AssingTasksToUser(Guid userId)
         {
             UserId = userId;
