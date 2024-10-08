@@ -24,7 +24,7 @@ namespace Application.Commands.TaskCommand.UpdateTaskCommand
             if (task.IsDeleted)
                 return ResultViewModel.Error("Task was deleted.");
 
-            if (task.IsCompleted)
+            if (task.Status == Core.Enums.EnumTaskStatus.Completed)
                 return ResultViewModel.Error("Task already completed.");
             
             var taskValidateTitle = await _context.Tasks.FirstOrDefaultAsync(t =>  t.Title == request.Title && t.ProjectId == request.ProjectId);

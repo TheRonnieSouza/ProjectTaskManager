@@ -16,7 +16,6 @@ namespace Application.Commands.TaskCommand.CreateTaskCommand
         public string Description { get; set; }
         public EnumTaskPriority Priority { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public bool IsCompleted { get; set; }
         public tTask ToEntity() =>
             new(Id, UserId, ProjectId,Title, Description, DeliveryDate, Priority);
 

@@ -9,7 +9,7 @@ namespace Application.Commands.ProjectCommand.CreateProjectCommand
         private readonly ProjectTaskManagerDbContext _context;
         public ValidadeCreateProjectBehavior(ProjectTaskManagerDbContext context) 
         {
-            context = _context;
+            _context = context;
         }
         public async Task<ResultViewModel<Guid>> Handle(CreateProjectCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {

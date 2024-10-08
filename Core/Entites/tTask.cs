@@ -34,17 +34,15 @@ namespace Core.Entites
         public Project Project { get; set; }         
         public List<Comment>? Comments { get; set; } 
         public List<Tag>? Tags { get; set; } 
-        public bool IsCompleted { get; set; } 
 
 
-        public void UpdateTask(string title, string description, EnumTaskPriority priority, DateTime deliveryDate, bool isCompleted,
+        public void UpdateTask(string title, string description, EnumTaskPriority priority, DateTime deliveryDate, 
                             Guid? userId, Guid projectId)
         {
             Title = title;
             Description = description;
             Priority = priority;
             DeliveryDate = deliveryDate;
-            IsCompleted = isCompleted;
             UserId = userId;
             ProjectId = projectId;
         }

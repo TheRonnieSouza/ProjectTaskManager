@@ -17,7 +17,7 @@ namespace Application.Commands.TaskCommand.UpdateTaskCommand
         {
             var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
 
-            task.UpdateTask(request.Title,request.Description, request.Priority,request.DeliveryDate,request.IsCompleted,request.UserId, request.ProjectId);
+            task.UpdateTask(request.Title,request.Description, request.Priority,request.DeliveryDate,request.UserId, request.ProjectId);
             _context.Update(task);
             await _context.SaveChangesAsync();
 

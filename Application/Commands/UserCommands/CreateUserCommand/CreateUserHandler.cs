@@ -1,4 +1,5 @@
 ﻿using Application.Models;
+using Application.Notification.UserCreated;
 using Infrastructure.Persistence;
 using MediatR;
 
@@ -7,21 +8,24 @@ namespace Application.Commands.UserCommands.CreateUserCommand
     public class CreateUserHandler :IRequestHandler<CreateUserCommand, ResultViewModel<Guid>>
     {
         private readonly ProjectTaskManagerDbContext _context;
-        public CreateUserHandler(ProjectTaskManagerDbContext context)
+        private readonly IMediator _mediator;
+        public CreateUserHandler(ProjectTaskManagerDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         public async Task<ResultViewModel<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-            //TODO 
-            //Permitir o cadastro de novos usuários no sistema, validando informações como nome e email (PLUS 1).
-            //Garantir que cada usuário possua um identificador único.
-            //
+        {            
             var newUser = request.ToEntity();
 
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
+
+            var sendWelcomeEmailNotification = new UserCreatedNotification(
+                newUser.Id, newUser.Email, newUser.Name);
+
+            await _mediator.Publish(sendWelcomeEmailNotification);
 
             return ResultViewModel<Guid>.Success(newUser.Id);
         }
