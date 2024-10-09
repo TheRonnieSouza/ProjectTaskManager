@@ -16,14 +16,14 @@ namespace Application.Commands.TaskCommand.CreateTaskCommand
 
         public async Task<ResultViewModel<Guid>> Handle(CreateTaskCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            var projectExist = await _context.Projects.AnyAsync(p => p.Id == request.ProjectId);
+            var projectExist = await _context.Projects.SingleOrDefaultAsync(p => p.Id == request.ProjectId);
 
-            if (!projectExist)
+            if (projectExist == null)
                 return ResultViewModel<Guid>.Error("The project for this task, does not exist.");
 
-            var taskName = await _context.Tasks.FirstOrDefaultAsync(t => t.Title == request.Title && t.ProjectId == request.ProjectId);
+            var taskName = await _context.Tasks.AnyAsync(t => t.Title == request.Title && t.ProjectId == request.ProjectId);
 
-            if (taskName != null)
+            if (taskName)
                 return ResultViewModel<Guid>.Error("The task already exist.");
 
             return await next();

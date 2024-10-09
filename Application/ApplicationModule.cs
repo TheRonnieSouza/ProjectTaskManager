@@ -1,5 +1,6 @@
 ﻿using Application.Commands.ProjectCommand.CreateProjectCommand;
 using Application.Commands.TaskCommand.CreateTaskCommand;
+using Application.Commands.UserCommands.CreateUserCommand;
 using Application.Models;
 using Application.Services;
 using MediatR;
@@ -34,6 +35,8 @@ namespace Application
             });
 
             services.AddTransient < IPipelineBehavior<CreateProjectCommand, ResultViewModel<Guid>>, ValidadeCreateProjectBehavior>();
+            services.AddTransient<IPipelineBehavior<CreateTaskCommand, ResultViewModel<Guid>>, ValidateCreateTaskBehavior>();
+            services.AddTransient<IPipelineBehavior<CreateUserCommand, ResultViewModel<Guid>>, ValidateCreateUserBehavior>();
             return services;
         }
     }

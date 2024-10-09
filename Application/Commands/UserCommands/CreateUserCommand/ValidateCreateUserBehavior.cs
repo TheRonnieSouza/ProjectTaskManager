@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Infrastructure.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.CreateUserCommand
 {
@@ -14,7 +15,7 @@ namespace Application.Commands.UserCommands.CreateUserCommand
         }
         public async Task<ResultViewModel<Guid>> Handle(CreateUserCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            bool emailExist = _context.Users.Any(u =>  u.Email == request.Email);
+            bool emailExist = await _context.Users.AnyAsync(u =>  u.Email == request.Email);
 
             if (emailExist)
                 return ResultViewModel<Guid>.Error($"Alredy exist the email: {request.Email}");

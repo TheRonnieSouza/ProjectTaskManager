@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Infrastructure.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.CreateProjectCommand
 {
@@ -13,9 +14,9 @@ namespace Application.Commands.ProjectCommand.CreateProjectCommand
         }
         public async Task<ResultViewModel<Guid>> Handle(CreateProjectCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            var projectExist =  _context.Projects.Any(p => p.Id == request.Id);
+            var projectExist =  await _context.Projects.AnyAsync(p => p.Id == request.Id);
           
-            if(!projectExist)
+            if(projectExist)
             {
                 return ResultViewModel<Guid>.Error("The Project Already Exist!");
             }

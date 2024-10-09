@@ -60,6 +60,11 @@ namespace ProjectTaskManager.API.Controllers
         {
             var result = await _mediator.Send(command);
 
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Message);
+            }
+
             return CreatedAtAction(nameof(GetTaskById), new { id = result.Data}, command);
         }
 
