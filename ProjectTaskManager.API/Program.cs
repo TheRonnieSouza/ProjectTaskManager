@@ -1,6 +1,5 @@
-using Infrastructure.Persistence;
 using Application;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure;
 using ProjectTaskManager.API.ExpectionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,14 +12,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
-        .AddApplication();
+          .AddApplication()
+        .AddInfrastructure(builder.Configuration);
+        
 
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 builder.Services.AddProblemDetails();
-
-var stringConnection = builder.Configuration.GetConnectionString("ProjectTaskManager");
-//new ProjectTaskManagerDesingFactory(stringConnection);
-builder.Services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseSqlServer(stringConnection));//o => o.UseSqlServer(stringConnection)
 //builder.Services.AddDbContext<ProjectTaskManagerDbContext>(u => u.UseInMemoryDatabase("TodoListDb"));
 
 var app = builder.Build();
