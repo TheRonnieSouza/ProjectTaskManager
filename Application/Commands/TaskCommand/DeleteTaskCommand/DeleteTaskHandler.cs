@@ -1,25 +1,23 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.TaskCommand.DeleteTaskCommand
 {
     public class DeleteTaskHandler : IRequestHandler<DeleteTaskCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly ITaskRepository _repository;
 
-        public DeleteTaskHandler(ProjectTaskManagerDbContext context)
+        public DeleteTaskHandler(ITaskRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
         public async Task<ResultViewModel> Handle(DeleteTaskCommand request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
+            var task = await _repository.GetById(request.Id);
              
             task.SetAsDeleted();
-             _context.Update(task);
-            await _context.SaveChangesAsync();
+            _repository.Update(task);
             return ResultViewModel.Success();
         }
     }

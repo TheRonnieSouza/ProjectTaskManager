@@ -1,33 +1,33 @@
 ﻿using Application.Models;
 using Core.Enums;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.UpdateProjectCommand
 {
     public class ValidateUpdateProjectBehavior :IPipelineBehavior<UpdateProjectCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-
-        public ValidateUpdateProjectBehavior(ProjectTaskManagerDbContext context)
+        private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;  
+        public ValidateUpdateProjectBehavior(IProjectRepository projectRepository,IUserRepository userRepository)
         {
-            _context = context;
+            _projectRepository = projectRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<ResultViewModel> Handle(UpdateProjectCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var project = await _projectRepository.GetById(request.Id);
 
             if (project == null)
                 return ResultViewModel.Error("Project not found.");
 
-            var ProfileExist = _context.Users.Any(u => u.Id == request.ParticipatingId && u.Profile == Profile.Operator);
+            var ProfileExist = await _userRepository.ProfileExist(request.ParticipatingId, Profile.Operator);
 
             if (!ProfileExist)
                 return ResultViewModel.Error("The Operator to be up to date was not found.");
 
-            ProfileExist = _context.Users.Any(u => u.Id == request.ParticipatingId && u.Profile == Profile.Manager);
+            ProfileExist = await _userRepository.ProfileExist(request.ParticipatingId, Profile.Manager); 
 
             if (!ProfileExist)
                 return ResultViewModel.Error("The Manager to be up to date was not found.");

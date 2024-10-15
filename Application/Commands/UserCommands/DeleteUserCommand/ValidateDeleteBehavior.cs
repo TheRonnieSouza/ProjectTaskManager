@@ -1,23 +1,22 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.DeleteUserCommand
 {
     public class ValidateDeleteBehavior : IPipelineBehavior<DeleteUserCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public ValidateDeleteBehavior(ProjectTaskManagerDbContext context)
+        public ValidateDeleteBehavior(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
         public async Task<ResultViewModel> Handle(DeleteUserCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
-            var userDeleted = await _context.Users.AnyAsync(u => u.Id == request.Id && u.IsActive && !u.IsDeleted);
+            var user = await _userRepository.ExistActiveUser(request.Id);
 
-            if (!userDeleted)
+            if (!user)
                 return ResultViewModel.Error("The user is not active or is deleted!");
 
             return await next();

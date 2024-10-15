@@ -1,28 +1,24 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.TaskCommand.DeleteTaskCommand
 {
     public class ValidateDeleteTaskBehavior : IPipelineBehavior<DeleteTaskCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly ITaskRepository _taskRepository;
 
-        public ValidateDeleteTaskBehavior(ProjectTaskManagerDbContext context)
+        public ValidateDeleteTaskBehavior(ITaskRepository taskRepository)
         {
-            _context = context;
+            _taskRepository = taskRepository;
         }
 
         public async Task<ResultViewModel> Handle(DeleteTaskCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
-            var task = _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
+            var task = await _taskRepository.GetById(request.Id);
 
             if (task == null)
                 return ResultViewModel.Error("Task not found.");
-
-            if(!task.IsCompleted)
-                return ResultViewModel.Error("Task needs to be finished.");
 
             return await next();
         }

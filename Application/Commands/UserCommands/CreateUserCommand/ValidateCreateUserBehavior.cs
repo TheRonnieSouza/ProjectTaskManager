@@ -1,21 +1,20 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.CreateUserCommand
 {
     public class ValidateCreateUserBehavior : IPipelineBehavior<CreateUserCommand, ResultViewModel<Guid>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public ValidateCreateUserBehavior(ProjectTaskManagerDbContext context)
+        public ValidateCreateUserBehavior(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
         public async Task<ResultViewModel<Guid>> Handle(CreateUserCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            bool emailExist = await _context.Users.AnyAsync(u =>  u.Email == request.Email);
+            bool emailExist = await _userRepository.ExistEmail(request.Email);
 
             if (emailExist)
                 return ResultViewModel<Guid>.Error($"Alredy exist the email: {request.Email}");

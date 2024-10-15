@@ -1,24 +1,24 @@
 ﻿using Application.Models;
 using Application.Models.Users.ViewModels;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
 
 namespace Application.Queries.UserQueries.GetAllUsersQueries
 {
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, ResultViewModel<List<UsersViewModels>>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-        public GetAllUsersHandler(ProjectTaskManagerDbContext context)
+        private readonly IUserRepository _userRepository;
+        public GetAllUsersHandler(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<ResultViewModel<List<UsersViewModels>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var users = _context.Users.Where(u => !u.IsDeleted).ToList();
+            var users = await _userRepository.GetAll();
 
             if (users == null)
-                return ResultViewModel<List<UsersViewModels>>.Error("O usuario nao foi encontrado");
+                return ResultViewModel<List<UsersViewModels>>.Error("No users founded!");
 
             var usersViewModel = users.Select(UsersViewModels.FromEntity).ToList();
 

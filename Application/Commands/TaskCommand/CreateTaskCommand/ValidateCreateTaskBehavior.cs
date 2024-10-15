@@ -1,27 +1,29 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.TaskCommand.CreateTaskCommand
 {
     public class ValidateCreateTaskBehavior : IPipelineBehavior<CreateTaskCommand, ResultViewModel<Guid>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly ITaskRepository _taskRepository;
+        private readonly IProjectRepository _projectRepository;
 
-        public ValidateCreateTaskBehavior(ProjectTaskManagerDbContext context)
+        public ValidateCreateTaskBehavior(ITaskRepository taskRepository, IProjectRepository projectRepository)
         {
-            _context = context;
+            _taskRepository = taskRepository;
+            _projectRepository = projectRepository;
         }
-
         public async Task<ResultViewModel<Guid>> Handle(CreateTaskCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            var projectExist = await _context.Projects.SingleOrDefaultAsync(p => p.Id == request.ProjectId);
+            var projectExist = await _projectRepository.Exist(request.ProjectId);
 
-            if (projectExist == null)
+            if (!projectExist)
                 return ResultViewModel<Guid>.Error("The project for this task, does not exist.");
 
-            var taskName = await _context.Tasks.AnyAsync(t => t.Title == request.Title && t.ProjectId == request.ProjectId);
+            var allTask = await _taskRepository.GetAll();
+
+            var taskName = allTask.Any(t => t.Title == request.Title && t.ProjectId == request.ProjectId);
 
             if (taskName)
                 return ResultViewModel<Guid>.Error("The task already exist.");

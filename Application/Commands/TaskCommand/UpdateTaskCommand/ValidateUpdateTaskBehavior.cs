@@ -1,22 +1,21 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.TaskCommand.UpdateTaskCommand
 {
     public class ValidateUpdateTaskBehavior : IPipelineBehavior<UpdateTaskCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly ITaskRepository _repository;
 
-        public ValidateUpdateTaskBehavior(ProjectTaskManagerDbContext context)
+        public ValidateUpdateTaskBehavior(ITaskRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel> Handle(UpdateTaskCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == request.Id);
+            var task = await _repository.GetById( request.Id);
 
             if (task == null)
                 return ResultViewModel.Error("Task not found.");
@@ -27,7 +26,7 @@ namespace Application.Commands.TaskCommand.UpdateTaskCommand
             if (task.Status == Core.Enums.EnumTaskStatus.Completed)
                 return ResultViewModel.Error("Task already completed.");
             
-            var taskValidateTitle = await _context.Tasks.FirstOrDefaultAsync(t =>  t.Title == request.Title && t.ProjectId == request.ProjectId);
+            var taskValidateTitle = await _repository.TaskExistWithTheSameName(task);
 
             if (taskValidateTitle != null)
                 return ResultViewModel.Error("Task with the same name already exist.");

@@ -1,20 +1,19 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.CreateProjectCommand
 {
     public class ValidadeCreateProjectBehavior : IPipelineBehavior<CreateProjectCommand, ResultViewModel<Guid>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-        public ValidadeCreateProjectBehavior(ProjectTaskManagerDbContext context) 
+        private readonly IProjectRepository _repository;
+        public ValidadeCreateProjectBehavior(IProjectRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
         public async Task<ResultViewModel<Guid>> Handle(CreateProjectCommand request, RequestHandlerDelegate<ResultViewModel<Guid>> next, CancellationToken cancellationToken)
         {
-            var projectExist =  await _context.Projects.AnyAsync(p => p.Id == request.Id);
+            var projectExist =  await _repository.Exist(request.Id);
           
             if(projectExist)
             {

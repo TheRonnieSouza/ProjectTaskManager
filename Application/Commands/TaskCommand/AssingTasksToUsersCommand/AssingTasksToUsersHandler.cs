@@ -1,26 +1,25 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Application.Commands.TaskCommand.AssingTasksToUsersCommand
 {
     public class AssingTasksToUsersHandler : IRequestHandler<AssingTasksToUsersCommand, ResultViewModel>     
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly ITaskRepository _repository;
 
-        public AssingTasksToUsersHandler(ProjectTaskManagerDbContext context)
+        public AssingTasksToUsersHandler(ITaskRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel> Handle(AssingTasksToUsersCommand request, CancellationToken cancellationToken)
         {
-            var task = await _context.Tasks.SingleOrDefaultAsync(t => t.Id == request.TaskId);
+            var task = await _repository.GetById(request.TaskId);
 
             task.AssingTasksToUser(request.UserId);
-            await  _context.SaveChangesAsync();
+
+           _repository.Update(task);
 
             return ResultViewModel.Success();
         }

@@ -1,24 +1,22 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.ProjectDeleteCommand
 {
     public class ProjectDeleteHandler : IRequestHandler<ProjectDeleteCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-        public ProjectDeleteHandler(ProjectTaskManagerDbContext context)
-        { 
-            _context = context;
+        private readonly IProjectRepository _repository;
+        public ProjectDeleteHandler(IProjectRepository repository)
+        {
+            _repository = repository;
         }
         public async Task<ResultViewModel> Handle(ProjectDeleteCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var project = await _repository.GetById(request.Id);
 
             project.SetAsDeleted();
-            _context.Update(project);
-            await _context.SaveChangesAsync();
+            _repository.Update(project);
 
             return ResultViewModel.Success();
 

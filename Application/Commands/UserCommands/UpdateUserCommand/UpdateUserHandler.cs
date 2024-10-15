@@ -1,28 +1,24 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.UpdateUserCommand
 {
     public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-        public UpdateUserHandler(ProjectTaskManagerDbContext context)
+        private readonly IUserRepository _userRepository;
+
+        public UpdateUserHandler(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<ResultViewModel> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id);
-
-            if (user == null) 
-                return ResultViewModel.Error("Não foi encontrado nenhum usuário para atualizar");
+            var user = await _userRepository.GetById(request.Id);
 
             user.UpdateUser(request.Name, request.Email);
-            _context.Update(user);
-            await _context.SaveChangesAsync();
+            _userRepository.Update(user);
 
             return  ResultViewModel.Success();
         }

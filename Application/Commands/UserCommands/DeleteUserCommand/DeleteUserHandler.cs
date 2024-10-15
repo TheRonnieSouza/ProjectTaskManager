@@ -1,28 +1,27 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.DeleteUserCommand
 {
     public class DeleteUserHandler : IRequestHandler<DeleteUserCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-        public DeleteUserHandler(ProjectTaskManagerDbContext context)
+        private readonly IUserRepository _userRepository;
+
+        public DeleteUserHandler(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<ResultViewModel> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id);
+            var user = await _userRepository.GetById(request.Id);
 
             if (user == null)
                 return ResultViewModel.Error("The user cannot be deleted or the user not founded");
 
             user.SetAsDeleted();
-            _context.Update(user);
-            await _context.SaveChangesAsync();
+            _userRepository.Update(user);  
 
             return ResultViewModel.Success();
         }

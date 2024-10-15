@@ -1,26 +1,23 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.UpdateProjectCommand
 {
     public class UpdateProjectHandler : IRequestHandler<UpdateProjectCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-
-        public UpdateProjectHandler(ProjectTaskManagerDbContext context)
+        private readonly IProjectRepository _repository;
+        public UpdateProjectHandler(IProjectRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<ResultViewModel> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p =>  p.Id == request.Id);
+            var project = await _repository.GetById(request.Id);
 
             project.UpdateProject(request.Description, request.CompletedDate,request.ManagerId,request.ParticipatingId);
-            _context.Update(project);
-            await _context.SaveChangesAsync();
+            _repository.Update(project);
 
             return ResultViewModel.Success();
         }

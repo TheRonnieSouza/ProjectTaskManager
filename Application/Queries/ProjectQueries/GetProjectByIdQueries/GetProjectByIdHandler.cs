@@ -1,25 +1,20 @@
-﻿using Application.Models.Projects.ViewModels;
-using Application.Models;
+﻿using Application.Models;
+using Application.Models.Projects.ViewModels;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
 
 namespace Application.Queries.ProjectQueries.GetProjectByIdQueries
 {
     public class GetProjectByIdHandler : IRequestHandler<GetProjectByIdQuery, ResultViewModel<GetProjectViewModel>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-
-        public GetProjectByIdHandler(ProjectTaskManagerDbContext context)
+        private readonly IProjectRepository _repository;
+        public GetProjectByIdHandler(IProjectRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
         public async Task<ResultViewModel<GetProjectViewModel>> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(x => x.Id == request.Id);
-
-            if (project == null)
-                return ResultViewModel<GetProjectViewModel>.Error("Nao foi encontrado nenhum projeto");
+            var project = await _repository.GetDatailsById(request.Id);
 
             var result = GetProjectViewModel.FromEntity(project);
 

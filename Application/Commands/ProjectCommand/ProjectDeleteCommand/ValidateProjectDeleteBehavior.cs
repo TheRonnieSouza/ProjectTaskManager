@@ -1,22 +1,19 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.ProjectCommand.ProjectDeleteCommand
 {
     public class ValidateProjectDeleteBehavior :IPipelineBehavior<ProjectDeleteCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
-
-        public ValidateProjectDeleteBehavior(ProjectTaskManagerDbContext context)
+        private readonly IProjectRepository _repository;
+        public ValidateProjectDeleteBehavior(IProjectRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
-
         public async Task<ResultViewModel> Handle(ProjectDeleteCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
-            var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var project = await _repository.GetById(request.Id);
 
             if (project.IsDeleted)
                 return ResultViewModel.Error("Project already deleted.");            

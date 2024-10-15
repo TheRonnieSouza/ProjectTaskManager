@@ -1,23 +1,22 @@
 ﻿using Application.Models;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.UserCommands.UpdateUserCommand
 {
     public class ValidateUpdateUserBehavior : IPipelineBehavior<UpdateUserCommand, ResultViewModel>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public ValidateUpdateUserBehavior(ProjectTaskManagerDbContext context)
+        public ValidateUpdateUserBehavior(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         public async Task<ResultViewModel> Handle(UpdateUserCommand request, RequestHandlerDelegate<ResultViewModel> next, CancellationToken cancellationToken)
         {
 
-            var userExist = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.Id && !u.IsDeleted);
+            var userExist = await _userRepository.GetById(request.Id);
 
             if (userExist != null)
                 return ResultViewModel.Error("The user is not founded or deleted");

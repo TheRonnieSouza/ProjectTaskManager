@@ -1,17 +1,17 @@
 ﻿using Application.Models;
 using Application.Notification.UserCreated;
-using Infrastructure.Persistence;
+using Core.Repositories;
 using MediatR;
 
 namespace Application.Commands.UserCommands.CreateUserCommand
 {
     public class CreateUserHandler :IRequestHandler<CreateUserCommand, ResultViewModel<Guid>>
     {
-        private readonly ProjectTaskManagerDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IMediator _mediator;
-        public CreateUserHandler(ProjectTaskManagerDbContext context, IMediator mediator)
+        public CreateUserHandler(IUserRepository userRepository, IMediator mediator)
         {
-            _context = context;
+            _userRepository = userRepository;
             _mediator = mediator;
         }
 
@@ -19,8 +19,7 @@ namespace Application.Commands.UserCommands.CreateUserCommand
         {            
             var newUser = request.ToEntity();
 
-            await _context.Users.AddAsync(newUser);
-            await _context.SaveChangesAsync();
+           var Id = _userRepository.Add(newUser);          
 
             var sendWelcomeEmailNotification = new UserCreatedNotification(
                 newUser.Id, newUser.Email, newUser.Name);
