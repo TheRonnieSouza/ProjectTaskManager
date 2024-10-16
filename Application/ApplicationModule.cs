@@ -14,6 +14,9 @@ using Application.Queries.ProjectQueries.GetProjectByIdQueries;
 using Application.Queries.TaskQueries.GetTaskById;
 using Application.Queries.UserQueries.GetUserById;
 using Application.Services;
+using Application.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,6 +28,7 @@ namespace Application
         {
             services.AddServices();
             services.AddMediador();
+            services.AddValidator();
 
             return services;
         
@@ -56,6 +60,15 @@ namespace Application
             services.AddTransient<IPipelineBehavior<GetProjectByIdQuery, ResultViewModel<GetProjectViewModel>>, ValidateGetProjectByIdBehavior>();
             services.AddTransient<IPipelineBehavior<GetTaskByIdQuery, ResultViewModel<GetTaskViewModel>>, ValidateGetTaskByIdBehavior>();
             services.AddTransient<IPipelineBehavior<GetUserByIdQuery, ResultViewModel<UsersViewModels>>, ValidateGetUserByIdBehavior>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddValidator(this IServiceCollection services)
+        {
+            services
+                .AddFluentValidationAutoValidation()
+                .AddValidatorsFromAssemblyContaining<CreateProjectValidator>();
 
             return services;
         }
