@@ -17,6 +17,11 @@ namespace Application.Commands.TaskCommand.AssingTasksToUsersCommand
         {
             var task = await _repository.GetById(request.TaskId);
 
+            if(task.UserId != null)
+            {
+                return ResultViewModel.Error("Cannot uptdate assing user if already linked");
+            }
+
             task.AssingTasksToUser(request.UserId);
 
            _repository.Update(task);

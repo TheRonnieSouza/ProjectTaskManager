@@ -50,5 +50,9 @@ namespace Core.Entites
         {
             UserId = userId;
         }
+        public void RemovedUserAssing()
+        {
+            UserId = null;
+        }
     }
 }

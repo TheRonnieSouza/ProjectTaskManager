@@ -21,7 +21,9 @@ namespace Infrastructure
         {
             var connectionString = configuration.GetConnectionString("ProjectTaskManager");
 
-            services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseSqlServer(connectionString));
+            services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseInMemoryDatabase("ProjectTaskManager"));
+
+            //services.AddDbContext<ProjectTaskManagerDbContext>(o => o.UseSqlServer(connectionString));
 
 
             return services;
