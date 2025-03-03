@@ -13,7 +13,6 @@ using Application.Models.Users.ViewModels;
 using Application.Queries.ProjectQueries.GetProjectByIdQueries;
 using Application.Queries.TaskQueries.GetTaskById;
 using Application.Queries.UserQueries.GetUserById;
-using Application.Services;
 using Application.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -26,21 +25,12 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddServices();
             services.AddMediador();
             services.AddValidator();
 
             return services;
         
-        }
-
-        private static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IUserService, UserServices>();
-            return services;
-        }
+        }     
 
         private static IServiceCollection AddMediador(this IServiceCollection services)
         {

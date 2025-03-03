@@ -1,6 +1,7 @@
 ﻿using Core.Repositories;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repository;
+using Infrastructure.Storages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,16 @@ namespace Infrastructure
         {
             services
                 .AddRepositories()
+                .AddStoge()
                 .AddData(configuration);
+
+
+            return services;
+        }
+        private static IServiceCollection AddStoge(this IServiceCollection services)
+        {
+            services.AddScoped<IStorageService, S3Service>();          
+
 
             return services;
         }

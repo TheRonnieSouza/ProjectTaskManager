@@ -1,10 +1,10 @@
 ﻿using Application.Commands.UserCommands.CreateUserCommand;
 using Application.Commands.UserCommands.DeleteUserCommand;
 using Application.Commands.UserCommands.UpdateUserCommand;
-using Application.Models.Users.InputModels;
 using Application.Queries.UserQueries.GetAllUsersQueries;
 using Application.Queries.UserQueries.GetSearchQueries;
 using Application.Queries.UserQueries.GetUserById;
+using Infrastructure.Storages;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +15,14 @@ namespace ProjectTaskManager.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public UserController(IMediator mediator)
+        private readonly IStorageService _storageService;
+        public UserController(IMediator mediator, IStorageService service)
         {
             _mediator = mediator;
+            _storageService = service;
         }
-        //Delete api/users/1234
-        [HttpDelete("One/{id}")]
+       
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var result = await _mediator.Send(new DeleteUserCommand(id));
@@ -31,7 +33,7 @@ namespace ProjectTaskManager.API.Controllers
             return NoContent();
         }               
 
-        [HttpGet("All")]
+        [HttpGet("GetAll")]
         public async  Task<IActionResult> GetAllUsers()
         {
             var result = await _mediator.Send(new GetAllUsersQuery());
@@ -39,17 +41,16 @@ namespace ProjectTaskManager.API.Controllers
             return Ok(result);
         }
 
-        //Get api/users?search=crm
+        
         [HttpGet("search")]
-        public async Task<IActionResult> GetSearch(string search)
+        public async Task<IActionResult> GetSearch([FromQuery]string search)
         {
             var result = await _mediator.Send(new GetSearchQuery(search));
 
             return Ok(result);
         }
 
-        //Get api/users/1234
-        [HttpGet("One/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var result = await _mediator.Send(new GetUserByIdQuery(id));
@@ -61,7 +62,6 @@ namespace ProjectTaskManager.API.Controllers
             return Ok(result);
         }
 
-        //Post api/users/
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserCommand command)
         {
@@ -72,8 +72,7 @@ namespace ProjectTaskManager.API.Controllers
 
             return CreatedAtAction(nameof(GetUserById), new { id = result.Data }, command);
         }
-
-        //Put api/users/1234
+                
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
         {
@@ -85,12 +84,34 @@ namespace ProjectTaskManager.API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/profile-picture")]
-        public  IActionResult PutProfilePicture (IFormFile file)
+        [HttpPut("profile-picture")]
+        public async Task<IActionResult> PutProfilePicture (IFormFile file)
         {
-            var description =  $"File : {file.FileName}, Size: {file.Length}";
+            var stream = file.OpenReadStream();
+            var result = await _storageService.Upload("project-task-manager", file.FileName, stream);
 
-            return Ok(description);
+            return Ok(result);
+        }
+        [HttpGet("all-profile-picture")]
+        public async Task<IActionResult> GetAllProfilePicture()
+        {
+            var allFiles = await _storageService.GetAllFiles("project-task-manager");
+
+            return Ok(allFiles);
+        }
+        [HttpDelete("delete-profile-picture")]
+        public async Task<IActionResult> DeleteProfilePicture(string key)
+        {
+            var result = await _storageService.Delete("project-task-manager", key);
+
+            return Ok(result);
+        }
+        [HttpGet("url-profile-picture")]
+        public async Task<IActionResult> GetUrl(string key)
+        {
+            var result = await _storageService.UrlGenerator("project-task-manager", key);
+
+            return Ok(result);
         }
     }
 
